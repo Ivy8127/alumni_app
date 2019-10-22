@@ -1,0 +1,53 @@
+{% extends "layout.html" %} {% block body_contents %}
+<div class="container">
+	<div class="wrapper">
+		<form action="{{url_for('edit_profile', z_id=z_id)}}" method="POST" name="Login_Form" class="form-signin"  enctype="multipart/form-data">
+			<h3 class="form-signin-heading">Edit your profile</h3>
+			<hr class="colorgraph"><br>
+
+			<input type="text" class="form-control" name="name" placeholder="Name" value="{{user["name"] or ''}}" autofocus="" />
+			<input type="text" class="form-control" name="email" placeholder="Email" value="{{user["email"] or ''}}"  />
+			<input type="text" class="form-control" name="program" placeholder="Program" value="{{user["program"] or ''}}"  />
+			<input type="date" class="form-control" name="birthday" placeholder="Birthday" value="{{user["birthday"] or ''}}"  />
+			<input type="text" class="form-control" name="suburb" placeholder="Suburb" value="{{user["suburb"] or ''}}"  />
+			<input type="number" step="0.001" class="form-control" name="latitude" placeholder="Latitude" value="{{user["latitude"] or ''}}"  />
+			<input type="number" step="0.001" class="form-control" name="longitude" placeholder="Longitude" value="{{user["longitude"] or ''}}"  />
+			<textarea class="form-control" name="bio" placeholder="Bio">{{user["bio"] or ''}}</textarea>
+			<span>Edit Profile Picture</span>
+			<input type="file" name="image_path" accept="image/*">
+			<a href="{{url_for('delete_user_image', z_id=session["current_user"], image='image')}}"><div class="btn btn-outline-danger">Delete Profile Picture</div></a>
+			<br>
+			<span>Edit Background Picture</span>
+			<input type="file" name="background_path" accept="image/*">
+			<a href="{{url_for('delete_user_image', z_id=session["current_user"], image='background')}}"><div class="btn btn-outline-danger">Delete Background Picture</div></a>
+			<button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit">Update Details</button>
+		</form>
+		<a href="{{url_for('reset', z_id=session["current_user"])}}"><button class="btn btn-lg btn-warning btn-block">Reset Password</button></a>
+		<h3 class="form-signin-heading">Edit your courses</h3>
+		{%for course in courses%}
+			<a href="{{url_for('remove_course', course=course["code"])}}"><div class="btn btn-danger">Delete {{course["code"]}} {{course["year"]}} S{{course["semester"]}}</div></a>
+		{%endfor%}
+		<h3 class="form-signin-heading">Add a course</h3>
+		<form action="{{url_for('add_course')}}" method="POST" class="form-signin">
+			<label>Year</label>
+			<select name="year">
+			  <option value="2010">2010</option>
+			  <option value="2011">2011</option>
+				<option value="2012">2012</option>
+				<option value="2013">2013</option>
+				<option value="2014">2014</option>
+				<option value="2015">2015</option>
+				<option value="2016">2016</option>
+				<option value="2017">2017</option>
+			</select>
+			<label>Semester</label>
+			<select name="semester">
+			  <option value="1">1</option>
+			  <option value="2">2</option>
+			</select>
+			<input type="text" name="code" required="true">
+			<button class="btn btn-primary" name="Submit" value="Login" type="Submit">Add Course</button>
+		</form>
+	</div>
+</div>
+{% endblock %}

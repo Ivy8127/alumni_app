@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% block body_contents %}
+<h3>Post</h3>
+<hr class="colorgraph"><br>
+<div class="row text-center">
+  <form  action={{url_for('newpost')}} method="post" class="col-sm-12" >
+    <div class="form-group">
+      <textarea class="form-control" type="text" name="message" value="" placeholder="Whats on your mind?" required="true"></textarea>
+      <button class="btn btn-lg btn-primary" type="submit">Post</button>
+    </div>
+  </form>
+  <form  action={{url_for('newpost')}} method="post" class="col-sm-3 form-inline" style="margin:0 auto"  enctype="multipart/form-data">
+    <div class="form-group">
+      <button class="btn btn-md btn-primary my-2 my-sm-0" type="submit">Upload Media</button>
+      <input type="file" name="media" accept="image/*|video/*">
+    </div>
+  </form>
+</div>
+
+<h3>Feed</h3>
+<hr class="colorgraph"><br>
+
+<!-- pagination navigation -->
+<nav class="text-center">
+  <ul class="pagination">
+    {% if prev_page %}
+    <li class="page-item"  style="margin:0 auto;"><a class="page-link" href="{{url_for('home', page=prev_page)}}">Previous Page</a></li>
+    {% endif %}
+    {% if next_page %}
+    <li class="page-item"   style="margin:0 auto;"><a class="page-link" href="{{url_for('home', page=next_page)}}">Next Page</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<div class="row">
+  <div class="col-sm-12">
+  {% if feed|length == 0%}
+    <h3>Your feed is empty. Please add friends so we can generate content!</h3>
+  {% endif %}
+  {% for item in feed%}
+    {% if item["type"] == "post" %}
+      <div class="card border-primary mb-3 text-center">
+        <div class="card-header bg-primary text-white">
+          {% if item["source"] == "mention" %}
+            <small>You were mentioned in the following post by <a href="{{url_for('profile', z_id=item['user'])}}">{{item["user"]}}</a> at {{ item["created_at"]}}. <a href="{{url_for('viewpost', id=item["id"])}}">View the full post.</a></small>
+          {% elif item["source"] == "friend" %}
+            <small>Your friend <a href="{{url_for('profile', z_id=item['user'])}}">{{item["user"]}}</a> posted the following at {{ item["created_at"]}}. <a href="{{url_for('viewpost', id=item["id"])}}">View the full post.</a></small>
+          {% else %}
+            <small>You (<a href="{{url_for('profile', z_id=item['user'])}}">{{item["user"]}}</a>) posted the following at {{ item["created_at"]}}. <a href="{{url_for('viewpost', id=item["id"])}}">View the full post.</a></small>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            {%if item["media_type"] == "text"%}
+              <p class="card-text">{{ item["message"]}}</p>
+            {%elif item["media_type"] == "image"%}
+              <img src="{{url_for('static', filename=item['content_path'])}}">
+            {%elif item["media_type"] == "video"%}
+              <video width="320" height="240" controls>
+                <source src="{{url_for('static', filename=item['content_path'])}}" >
+              </video>
+            {%endif%}
+          </p>
+        </div>
+        <div class="card-footer">
+          <form  action={{url_for('newcomment')}} method="post" class="col-sm-3 form-inline" style="margin:0 auto">
+            <div class="form-group">
+              <button class="btn btn-md btn-warning my-2 my-sm-0" type="submit">Comment</button>
+              <input class="form-control" type="text" name="message" placeholder="Enter a Comment" required="true"></input>
+              <input type="hidden" value="{{item["id"]}}" name="post_id">
+            </div>
+          </form>
+          <form  action={{url_for('newcomment')}} method="post" class="col-sm-3 form-inline" style="margin:0 auto"  enctype="multipart/form-data">
+            <div class="form-group">
+              <button class="btn btn-md btn-warning my-2 my-sm-0" type="submit">Upload Media</button>
+              <input type="hidden" value="{{item["id"]}}" name="post_id">
+              <input type="file" name="media" accept="image/*|video/*">
+            </div>
+          </form>
+        </div>
+      </div>
+    {% elif item["type"] == "comment" %}
+    <div class="card border-warning mb-3 text-center">
+      <div class="card-header bg-warning text-white"><small>You were mentioned in the following comment by <a href="{{url_for('profile', z_id=item['user'])}}">{{item["user"]}}</a> at {{ item["created_at"]}}. <a href="{{url_for('viewpost', id=item["post"])}}">View the full post.</a></small></div>
+      <div class="card-body ">
+        <p class="card-text">
+          {%if item["media_type"] == "text"%}
+            <p class="card-text">{{ item["message"]}}</p>
+          {%elif item["media_type"] == "image"%}
+            <img src="{{url_for('static', filename=item['content_path'])}}">
+          {%elif item["media_type"] == "video"%}
+            <video width="320" height="240" controls>
+              <source src="{{url_for('static', filename=item['content_path'])}}" >
+            </video>
+          {%endif%}
+        </p>
+      </div>
+      <div class="card-footer">
+        <form  action={{url_for('newreply')}} method="post" class="col-sm-3 form-inline" style="margin:0 auto;">
+          <div class="form-group">
+            <button class="btn btn-md btn-success my-2 my-sm-0" type="submit">Reply</button>
+            <input class="form-control" type="text" name="message" placeholder="Enter a Reply" required="true"></input>
+            <input type="hidden" value="{{item["id"]}}" name="post_id">
+            <input type="hidden" value="{{item["comment"]}}" name="comment_id">
+          </div>
+        </form>
+      </div>
+    </div>
+    {% else %}
+    <div class="card border-success mb-3 text-center">
+        <div class="card-header bg-success text-white"><small>You were mentioned in the following reply by <a href="{{url_for('profile', z_id=item['user'])}}">{{item["user"]}}</a> at {{ item["created_at"]}}. <a href="{{url_for('viewpost', id=item["post"])}}">View the full post.</a></small></div>
+        <div class="card-body">
+        <p class="card-text">
+          {%if item["media_type"] == "text"%}
+            <p class="card-text">{{ item["message"]}}</p>
+          {%elif item["media_type"] == "image"%}
+            <img src="{{url_for('static', filename=item['content_path'])}}">
+          {%elif item["media_type"] == "video"%}
+            <video width="320" height="240" controls>
+              <source src="{{url_for('static', filename=item['content_path'])}}" >
+            </video>
+          {%endif%}
+        </p>
+      </div>
+    </div>
+    {% endif %}
+
+  {% endfor %}
+  <!-- pagination navigation -->
+  <nav class="text-center">
+    <ul class="pagination">
+      {% if prev_page %}
+      <li class="page-item"  style="margin:0 auto;"><a class="page-link" href="{{url_for('home', page=prev_page)}}">Previous Page</a></li>
+      {% endif %}
+      {% if next_page %}
+      <li class="page-item"   style="margin:0 auto;"><a class="page-link" href="{{url_for('home', page=next_page)}}">Next Page</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  </div>
+</div>
+
+{% endblock %}

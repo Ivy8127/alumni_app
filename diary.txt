@@ -1,0 +1,72 @@
+Date: 17/10
+Start: 1pm
+Stop: 6pm
+Activity: Set up / coding
+Comments: set up, begin conversion of data into database
+------------------------------------------------
+Date: 18/10
+Start: 3pm
+Stop: 6pm
+Activity: coding
+Comments: finish database setup. Got comments, posts and rpelies displaying. Search worlking and friends being displayed.
+------------------------------------------------
+Date: 20/10
+Start: 3pm
+Stop: 5pm
+Activity: refactoring
+Comments: needed to fix routes and file structure so it would work on cse machines
+------------------------------------------------
+Date: 21/10
+Start: 10am
+Stop: 12pm
+Activity: coding
+Comments: set up authentication
+------------------------------------------------
+Date: 21/10
+Start: 1pm
+Stop: 6pm
+Activity: coding
+Comments: Feed information being pulled. Also had to add friends relational database
+------------------------------------------------
+Date: 22/10
+Start: 9am
+Stop: 3am
+Activity: coding
+Comments: Cleaned up the feed. Now posts are displayed on their own page. Serach for home feed has also changed. Posting posts comments replies and replies working too.
+------------------------------------------------
+Date: 22/10
+Start: 1:30pm
+Stop: 5:40pm
+Activity: coding
+Comments: Started subset 3. Create accounts, email verification, forgot password
+------------------------------------------------
+Date: 23/10
+Start: 12:pm
+Stop: 5pm
+Activity: coding
+Comments: Finished all email related items. Change password, friend request  and verify account.
+------------------------------------------------
+Date: 24/10
+Start: 9am
+Stop: 12:pm
+Activity: coding
+Comments: Friend Suggestions working and uploading images to profile
+------------------------------------------------
+Date: 24/10
+Start: 10am
+Stop: 1pm
+Activity: coding
+Comments: Deleting profile images and styling of site.
+------------------------------------------------
+Date: 27/10
+Start: 1pm
+Stop: 3:30pm
+Activity: coding
+Comments: Can now post media
+------------------------------------------------
+Date: 28/10
+Start: 9pm
+Stop: 11am
+Activity: submission
+Comments: Fixed small bug where posts werent showing and submitted
+------------------------------------------------
